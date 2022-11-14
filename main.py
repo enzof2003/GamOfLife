@@ -27,11 +27,23 @@ def configInit(tableauInput):
     nombreEtapes = intInput("Nombre d'etapes pour le Conway : ")
     for iteration in range(nombreEtapes):
         changeEtat(tableauInput)
+        print("================== Etape numéro",iteration+1,"==================")
         imprime(tableauInput)
 
 
 def changeEtat(tableauInput):
-    print("a")
+    #On réutilise le code de configInit pour parcourir le tableau
+    tailleTableau = tableau.shape[1]
+
+    for i in range(tailleTableau - 2):
+        for j in range(tailleTableau - 2):
+            # Et on vérifie grâce à la fonction nbVoisin le nouvel état de la cellule
+            nbVoisinCelluleCourante = nbVoisin(i+1,j+1,tableauInput)
+            if nbVoisinCelluleCourante == 1 or nbVoisinCelluleCourante >= 4:
+                tableau[i+1,j+1]=0
+            elif nbVoisinCelluleCourante == 2 or nbVoisinCelluleCourante == 3:
+                tableau[i+1,j+1]=1
+
 
 
 def imprime(tableauInput):
