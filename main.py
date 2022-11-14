@@ -1,6 +1,6 @@
 # Pour gérer les tableaux à 2 dimension, numpy possède des matrices, plus lisible et avec des fonction pratique
 import numpy as np
-
+from colorama import Fore
 
 # Fonction permettant à l'utilisateur d'entrer un chiffre (avec vérification)
 # avec la possibilité de mettre un message customisé
@@ -10,7 +10,7 @@ def intInput(message="Un chiffre : ") -> int:
         num = int(num)
         return num
     except ValueError:
-        print('The provided value is not a number')
+        print("La valeur n'est pas un chiffre")
         quit(-1000)
 
 
@@ -28,13 +28,13 @@ def configInit(tableauInput):
     for iteration in range(nombreEtapes):
         changeEtat(tableauInput)
         print("================== Etape numéro",iteration+1,"==================")
-        imprime(tableauInput)
+        #imprime(tableauInput)
+        prettyPrint(tableauInput)
 
 
 def changeEtat(tableauInput):
     #On réutilise le code de configInit pour parcourir le tableau
     tailleTableau = tableau.shape[1]
-
     for i in range(tailleTableau - 2):
         for j in range(tailleTableau - 2):
             # Et on vérifie grâce à la fonction nbVoisin le nouvel état de la cellule
@@ -43,11 +43,33 @@ def changeEtat(tableauInput):
                 tableau[i+1,j+1]=0
             elif nbVoisinCelluleCourante == 2 or nbVoisinCelluleCourante == 3:
                 tableau[i+1,j+1]=1
-
+            # Sinon, on ne fait rien
 
 
 def imprime(tableauInput):
-    print(tableauInput)
+    # Renvois la taille du tableau
+    tailleTableau = tableau.shape[1]
+    for i in range(tailleTableau - 2):
+        # On initialise la ligne d'affichage
+        ligneActuelle ="| "
+        for j in range(tailleTableau - 2):
+            ligneActuelle+=str(tableau[i+1,j+1]) + " | "
+        print(ligneActuelle)
+
+
+#Autre mode d'affichage plus joli avec des carrés
+def prettyPrint(tableauInput):
+    # Fonctionnement quasiment identique avec imprime
+    tailleTableau = tableau.shape[1]
+    for i in range(tailleTableau - 2):
+        ligneActuelle =""
+        for j in range(tailleTableau - 2):
+            if tableau[i+1,j+1] == 1:
+                ligneActuelle += "▣"
+            else:
+                ligneActuelle += "□"
+
+        print(ligneActuelle)
 
 
 def nbVoisin(posX, posY,tableauInput)->int:
@@ -66,7 +88,7 @@ def nbVoisin(posX, posY,tableauInput)->int:
 
 
 # On ne prend pas en compte la bordure des 0 dans cette constante
-TAILLE_TABLEAU_UTILISABLE = 5
+TAILLE_TABLEAU_UTILISABLE = 4
 
 
 tableau = np.zeros((TAILLE_TABLEAU_UTILISABLE+2, TAILLE_TABLEAU_UTILISABLE+2), dtype=int)
