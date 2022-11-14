@@ -1,6 +1,5 @@
 # Pour gérer les tableaux à 2 dimension, numpy possède des matrices, plus lisible et avec des fonction pratique
 import numpy as np
-from colorama import Fore
 
 # Fonction permettant à l'utilisateur d'entrer un chiffre (avec vérification)
 # avec la possibilité de mettre un message customisé
@@ -28,8 +27,7 @@ def configInit(tableauInput):
     for iteration in range(nombreEtapes):
         changeEtat(tableauInput)
         print("================== Etape numéro",iteration+1,"==================")
-        #imprime(tableauInput)
-        prettyPrint(tableauInput)
+        imprime(tableauInput)
 
 
 def changeEtat(tableauInput):
@@ -46,30 +44,48 @@ def changeEtat(tableauInput):
             # Sinon, on ne fait rien
 
 
-def imprime(tableauInput):
-    # Renvois la taille du tableau
-    tailleTableau = tableau.shape[1]
-    for i in range(tailleTableau - 2):
-        # On initialise la ligne d'affichage
-        ligneActuelle ="| "
-        for j in range(tailleTableau - 2):
-            ligneActuelle+=str(tableau[i+1,j+1]) + " | "
-        print(ligneActuelle)
-
-
 #Autre mode d'affichage plus joli avec des carrés
-def prettyPrint(tableauInput):
-    # Fonctionnement quasiment identique avec imprime
+def imprime(tableauInput):
     tailleTableau = tableau.shape[1]
+    # On initialise la string d'affichage
+    ligneActuelle = ""
     for i in range(tailleTableau - 2):
-        ligneActuelle =""
         for j in range(tailleTableau - 2):
+            # Puis selon le contenue de la cellule, on met un carré pleins ou vide
             if tableau[i+1,j+1] == 1:
                 ligneActuelle += "▣"
             else:
                 ligneActuelle += "□"
+        ligneActuelle+="\n"
+    print(ligneActuelle)
 
-        print(ligneActuelle)
+def imprimeDifference(tableauBase, nouveauTableau):
+    tailleTableau = tableau.shape[1]
+    #On crée un tableau contenant la différence (0 / 1 avec resultat du changement, 2 si rien ne c'est passé
+    tableauDifference = np.zeros((tailleTableau,tailleTableau),dtype=int)
+    # On initialise la string d'affichage
+    ligneActuelle = ""
+    for i in range(tailleTableau - 2):
+        for j in range(tailleTableau - 2):
+            if tableauBase[i+1,j+1]!=nouveauTableau[i+1,j+1]:
+                tableauDifference[i+1,j+1] = nouveauTableau[i+1,j+1]
+            else:
+                tableauDifference[i + 1, j + 1] = 2
+
+    #PARTIE AFFICHAGE (similaire à imprime()
+    for i in range(tailleTableau - 2):
+        for j in range(tailleTableau - 2):
+            # Puis selon le contenue de la cellule, on met un carré pleins ou vide
+            if tableauDifference[i+1,j+1] == 1:
+                ligneActuelle += "▣"
+            elif tableauDifference[i+1,j+1] == 2:
+                ligneActuelle += "□"
+            else:
+                ligneActuelle += "▨"
+        ligneActuelle+="\n"
+    print(ligneActuelle)
+
+
 
 
 def nbVoisin(posX, posY,tableauInput)->int:
