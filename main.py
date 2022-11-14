@@ -15,6 +15,15 @@ def intInput(message="Un chiffre : ") -> int:
 
 
 def configInit(tableauInput):
+    # initialisation aléatoire des valeurs de chaque cellules
+    tailleTableau = tableau.shape[1]
+    # On va parcourir chaque cellule (mais pas celles des bordures)
+    # puis leur attribuer soit 1 ou 0 de manière aléatoire
+    for i in range(tailleTableau-2):
+        for j in range(tailleTableau-2):
+            tableauInput[i+1,j+1]=np.random.randint(2)
+
+    # Puis on continue la configuration
     nombreEtapes = intInput("Nombre d'etapes pour le Conway : ")
     for iteration in range(nombreEtapes):
         changeEtat(tableauInput)
@@ -34,13 +43,13 @@ def nbVoisin(posX, posY,tableauInput)->int:
     # On va faire l'addition de toutes les cellules autours de la cellule actuel
     # Dans le sens horaire en partant de celle au dessus
     nombreVoisin = int(tableauInput[posX,posY-1]+
-                       tableauInput[posX+1,posY+1]+
+                       tableauInput[posX+1,posY-1]+
                        tableauInput[posX+1,posY]+
+                       tableauInput[posX+1,posY+1]+
                        tableauInput[posX,posY+1]+
                        tableauInput[posX-1,posY+1]+
-                       tableauInput[posX,posY+1]+
-                       tableauInput[posX,posY+1]+
-                       tableauInput[posX,posY+1])
+                       tableauInput[posX-1,posY]+
+                       tableauInput[posX-1,posY-1])
     return nombreVoisin
 
 
@@ -48,6 +57,6 @@ def nbVoisin(posX, posY,tableauInput)->int:
 TAILLE_TABLEAU_UTILISABLE = 5
 
 
-tableau = np.ones((TAILLE_TABLEAU_UTILISABLE+2, TAILLE_TABLEAU_UTILISABLE+2))
-print(int(tableau[1,1]))
-#configInit(tableau)
+tableau = np.zeros((TAILLE_TABLEAU_UTILISABLE+2, TAILLE_TABLEAU_UTILISABLE+2), dtype=int)
+
+configInit(tableau)
